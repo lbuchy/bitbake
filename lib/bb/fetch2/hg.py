@@ -66,13 +66,6 @@ class Hg(FetchMethod):
         else:
             ud.proto = "hg"
 
-        ud.setup_revisons(d)
-
-        if 'rev' in ud.parm:
-            ud.revision = ud.parm['rev']
-        elif not ud.revision:
-            ud.revision = self.latest_revision(ud, d)
-
         # Create paths to mercurial checkouts
         hgsrcname = '%s_%s_%s' % (ud.module.replace('/', '.'), \
                             ud.host, ud.path.replace('/', '.'))
@@ -84,6 +77,13 @@ class Hg(FetchMethod):
         ud.moddir = os.path.join(ud.pkgdir, ud.module)
         ud.localfile = ud.moddir
         ud.basecmd = data.getVar("FETCHCMD_hg", d, True) or "/usr/bin/env hg"
+
+        ud.setup_revisons(d)
+
+        if 'rev' in ud.parm:
+            ud.revision = ud.parm['rev']
+        elif not ud.revision:
+            ud.revision = self.latest_revision(ud, d)
 
         ud.write_tarballs = d.getVar("BB_GENERATE_MIRROR_TARBALLS", True)
 
